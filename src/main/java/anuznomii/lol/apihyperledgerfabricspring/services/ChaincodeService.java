@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RequiredArgsConstructor
 public class ChaincodeService {
+
     private final Gateway gateway;
 
     // 1. create invoke method
@@ -34,6 +35,7 @@ public class ChaincodeService {
 
         var network = gateway.getNetwork("mychannel");
         var contract = network.getContract(chaincodeName);
+
         var result = contract.evaluateTransaction(methodName, args);
         return new String(result);
     }
