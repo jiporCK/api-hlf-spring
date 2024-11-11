@@ -55,6 +55,14 @@ public class FabricCAService {
         if (!FabricUtils.checkIdentityExistence("admin", wallet)) {
             log.info("Admin identity does not exist in wallet. Creating admin identity.");
             createAdminUserOrg1();
+            CAEnrollmentRequest request = CAEnrollmentRequest.builder()
+                    .username("client1")
+                    .affliation("org1.department1")
+                    .type("client")
+                    .secret("user1pw")
+                    .registrarUsername("admin")
+                    .build();
+            registerAndEnrollAdminUser(request);
         } else {
             log.info("Admin identity already exists in wallet.");
         }
@@ -91,7 +99,7 @@ public class FabricCAService {
 //
 //    }
 
-    public void registerAndEnrollUser(CAEnrollmentRequest request) throws Exception {
+    public void registerAndEnrollAdminUser(CAEnrollmentRequest request) throws Exception {
 
         // HFCA client
         var props = new Properties();
@@ -238,7 +246,7 @@ public class FabricCAService {
         log.info("Successfully store the identity to the wallet !  ");
     }
 
-    public void registerAndEnrollAdminUser(CAEnrollmentRequest request) throws Exception {
+    public void registerAndEnrollUser(CAEnrollmentRequest request) throws Exception {
 
         // HFCA client
         var props = new Properties();

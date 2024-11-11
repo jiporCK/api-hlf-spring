@@ -20,7 +20,7 @@ public class FabricCAController {
     @PostMapping("/register")
     public ResponseEntity<String> registerUser(@RequestBody CAEnrollmentRequest request) {
         try {
-            fabricCAService.registerAndEnrollAdminUser(request);
+            fabricCAService.registerAndEnrollUser(request);
             return ResponseEntity.status(HttpStatus.CREATED).body(
                     "User registered and enrolled successfully"
             );

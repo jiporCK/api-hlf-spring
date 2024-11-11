@@ -18,6 +18,5 @@ public class CAEnrollmentRequest {
     private String registrarUsername; // we can hide this in prod
     private String type ; // peer  | client | admin ! 
     @Builder.Default
-    private Boolean genSecret = true; 
-
+    private Boolean genSecret = true;
 }

@@ -30,14 +30,20 @@ public class ChaincodeService {
     }
 
     // 2. create query method
-    public String queryChaincode(String chaincodeName,
-                                 String methodName, String... args) throws ContractException {
-
+    public String queryChaincode(String chaincodeName, String methodName, String... args) throws ContractException {
         var network = gateway.getNetwork("mychannel");
         var contract = network.getContract(chaincodeName);
 
-        var result = contract.evaluateTransaction(methodName, args);
+        byte[] result;
+        if (args.length > 0 && args[0] != null && !args[0].isEmpty()) {
+            result = contract.evaluateTransaction(methodName, args);
+        } else {
+            // Call a chaincode function without args or a default function
+            result = contract.evaluateTransaction(methodName);
+        }
         return new String(result);
     }
+
+
 
 }

@@ -1,15 +1,13 @@
 package anuznomii.lol.apihyperledgerfabricspring.restcontrollers;
 
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.hyperledger.fabric.gateway.ContractException;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 
 import anuznomii.lol.apihyperledgerfabricspring.services.ChaincodeService;
 import lombok.RequiredArgsConstructor;
 
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
 
 @RestController
 @RequestMapping("/api/v1/chaincode")
@@ -32,11 +30,20 @@ public class ChaincodeRestController {
     @GetMapping("/{chaincodeName}/{functionName}/query")
     public ResponseEntity<String> queryChaincode(
             @PathVariable String chaincodeName,
-            @PathVariable String functionName) throws Exception {
+            @PathVariable String functionName,
+            @RequestParam(required = false) String assetId) {
 
-        return ResponseEntity.ok(
-                chaincodeService.queryChaincode(chaincodeName,
-                        functionName, ""));
+        try {
+            String result = chaincodeService.queryChaincode(chaincodeName, functionName, assetId);
+            return ResponseEntity.ok(result);
+        } catch (ContractException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Asset not found or query error: " + e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error executing query: " + e.getMessage());
+        }
     }
+
 
 }
